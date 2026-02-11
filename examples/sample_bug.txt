@@ -1,0 +1,6 @@
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at MyProject.Services.UserService.GetUserDetails(Int32 userId) in C:\Projects\MyProject\Services\UserService.cs:line 52
+   at MyProject.Controllers.UserController.Get(Int32 id) in C:\Projects\MyProject\Controllers\UserController.cs:line 25
+   at System.Web.Http.Controllers.ApiControllerActionInvoker.InvokeActionAsync(HttpActionContext actionContext, CancellationToken cancellationToken)
+---
+Description: The user tried to view their profile, but the page crashed with a 500 error. This only happens for new users who haven't set up their profile picture yet.

@@ -1,96 +1,83 @@
-✅ Bug Summary AI Tool — Repository Description (Ready to Use)
-🧠 Bug Summary AI Tool
+# 🧠 Bug Summary AI Tool
 
 An AI-powered utility that automatically analyzes bug reports, error logs, or Jira ticket descriptions and generates clear, concise summaries along with potential root causes and suggested fixes.
 
-This tool is designed to improve developer productivity by reducing the time spent understanding complex bug reports and log files. It leverages a Large Language Model (LLM) to provide high-quality summaries and actionable insights instantly.
+This tool is designed to improve developer productivity by reducing the time spent understanding complex bug reports and log files. It leverages OpenAI's GPT-4o to provide high-quality summaries and actionable insights instantly.
 
-🚀 Features
+## 🚀 Features
 
-📄 Automatic Bug Summaries
-Converts long or unclear bug descriptions into short, clear summaries.
+- **📄 Automatic Bug Summaries**: Converts long or unclear bug descriptions into short, clear summaries.
+- **🛠 Root Cause Analysis**: AI suggests the most probable root cause based on error logs.
+- **🧪 Fix Recommendations**: Provides logical solutions and debugging steps.
+- **� Dual Interface**:
+  - **CLI**: Fast terminal-based analysis.
+  - **Dashboard**: Premium web interface built with Streamlit.
 
-🛠 Root Cause Analysis (AI-Based)
-AI suggests the most probable root cause of the bug.
+## 📦 Tech Stack
 
-🧪 Fix Recommendations
-Provides possible solutions or debugging steps.
+- **Python 3.10+**
+- **OpenAI API** (GPT-4o)
+- **FastAPI / CLI** (Click, Rich)
+- **Streamlit** (Web UI)
 
-🔍 Works with Logs or Ticket Text
-You can paste any error logs or issue descriptions.
+## 🔧 Installation & Setup
 
-🤖 Built Using AI
-Demonstrates effective AI usage for development workflows.
+1. **Clone the repository**:
 
-📦 Tech Stack
+   ```bash
+   git clone <repo-url>
+   cd AI-Project
+   ```
 
-Python
+2. **Install dependencies**:
 
-OpenAI API (or any LLM API)
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-FastAPI / simple CLI (depending on version you implement)
+3. **Configure Environment Variables**:
+   Copy `.env.example` to `.env` and add your OpenAI API Key:
+   ```bash
+   OPENAI_API_KEY=your_key_here
+   ```
 
-📁 Project Structure
-/bug-summary-ai-tool
-│── app.py
-│── requirements.txt
-│── README.md
-│── examples/
-│     └── sample_bug.txt
+## 🎮 How to Use
 
-🔧 How It Works
+### 📟 Command Line Interface (CLI)
 
-Developer pastes a bug report or log.
+Analyze a file directly from your terminal:
 
-The tool sends it to an AI model.
+```bash
+python app.py analyze examples/sample_bug.txt
+```
 
-AI returns:
+### 🌐 Web Dashboard
 
-Short bug summary
+Launch the interactive dashboard:
 
-Root cause guess
+```bash
+streamlit run dashboard.py
+```
 
-Suggested fix
+## 📝 Example Output
 
-Results are displayed in CLI or web UI.
+**Input**: `NullReferenceException in UserService.cs at line 52...`
 
-📝 Example Output
+**AI Output**:
 
-Input:
+- **Summary**: The system crashes due to a null object reference in UserService.
+- **Root Cause**: Missing null validation on user profile data.
+- **Fix**: Add null checks before accessing user attributes.
 
-NullReferenceException in UserService.cs at line 52...
+## 🎯 Purpose of This Project
 
+- Independent development using AI
+- High token usage & effective prompt design
+- Practical improvement for engineering teams
+- Fast delivery using AI-assisted coding workflows
 
-AI Output:
+## 📚 Future Enhancements
 
-Summary: The system crashes due to a null object reference in UserService.
-
-Root Cause: Missing null validation on user profile data.
-
-Fix: Add null checks before accessing user attributes.
-
-🎯 Purpose of This Project
-
-This project demonstrates:
-
-Independent development using AI
-
-High token usage & effective prompt design
-
-Practical improvement for engineering teams
-
-Fast delivery using AI-assisted coding workflows
-
-📤 How to Run
-pip install -r requirements.txt
-python app.py
-
-📚 Future Enhancements
-
-Integrate with Jira API
-
-Generate fix PR templates
-
-Add UI dashboard
-
-Export reports to PDF
+- Integrate with Jira/GitHub API
+- Generate fix PR templates
+- Export reports to PDF
