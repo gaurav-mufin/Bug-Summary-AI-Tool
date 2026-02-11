@@ -16,9 +16,16 @@ console = Console()
 class BugAnalyzer:
     def __init__(self, api_key=None):
         self.api_key = api_key or os.getenv("OPENAI_API_KEY")
+        self.base_url = os.getenv("OPENROUTER_BASE_URL", "https://openrouter.ai/api/v1")
+        self.model = os.getenv("AI_MODEL", "openai/gpt-oss-120b:free")
+        
         if not self.api_key:
-            raise ValueError("OpenAI API Key not found. Please set OPENAI_API_KEY in .env file.")
-        self.client = OpenAI(api_key=self.api_key)
+            raise ValueError("API Key not found. Please set OPENAI_API_KEY in .env file.")
+        
+        self.client = OpenAI(
+            base_url=self.base_url,
+            api_key=self.api_key,
+        )
 
     def analyze(self, bug_report: str):
         prompt = f"""
@@ -47,15 +54,30 @@ class BugAnalyzer:
         """
         
         response = self.client.chat.completions.create(
-            model="gpt-4o",
+            model=self.model,
             messages=[
                 {"role": "system", "content": "You are a helpful assistant specialized in software debugging."},
                 {"role": "user", "content": prompt}
             ],
-            temperature=0.2
+            extra_headers={
+                "HTTP-Referer": "https://github.com/LionCho/AI-Project",
+                "X-Title": "Bug Summary AI Tool",
+            }
         )
         
-        return response.choices[0].message.content
+        # Capture usage info if available (OpenRouter specific reasoning tokens)
+        usage = getattr(response, 'usage', None)
+        reasoning_tokens = 0
+        if usage and hasattr(usage, 'extra_fields'):
+             # Some providers put reasoning tokens in extra fields
+             reasoning_tokens = usage.extra_fields.get('reasoning_tokens', 0)
+        elif usage and hasattr(usage, 'reasoning_tokens'):
+             reasoning_tokens = usage.reasoning_tokens
+
+        return {
+            "content": response.choices[0].message.content,
+            "reasoning_tokens": reasoning_tokens
+        }
 
 @click.group()
 def cli():
@@ -78,9 +100,14 @@ def analyze(file_path):
             transient=True,
         ) as progress:
             progress.add_task(description="Analyzing bug report...", total=None)
-            result = analyzer.analyze(content)
+            result_data = analyzer.analyze(content)
+        
+        result = result_data["content"]
+        reasoning = result_data["reasoning_tokens"]
         
         console.print(Panel(Markdown(result), title="Analysis Results", border_style="green"))
+        if reasoning:
+            console.print(f"[dim]Reasoning tokens used: {reasoning}[/dim]")
         
     except Exception as e:
         console.print(f"[bold red]Error:[/bold red] {str(e)}")

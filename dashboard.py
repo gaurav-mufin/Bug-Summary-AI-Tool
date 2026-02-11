@@ -78,9 +78,14 @@ def main():
                 try:
                     with st.spinner("AI is crunching the logs..."):
                         analyzer = BugAnalyzer()
-                        result = analyzer.analyze(bug_input)
+                        result_data = analyzer.analyze(bug_input)
+                        result = result_data["content"]
+                        reasoning = result_data["reasoning_tokens"]
                     
                     st.markdown(f'<div class="report-card">{result}</div>', unsafe_allow_html=True)
+                    
+                    if reasoning:
+                        st.caption(f"🧠 Reasoning tokens used: {reasoning}")
                     
                     # Download button
                     st.download_button(
